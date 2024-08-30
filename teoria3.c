@@ -64,8 +64,26 @@ void inserir(Lista *lista, int valor){
             atual->anterior = novo;
         }
     }
+    lista->qtde++;
+}
+
+void mostrar(Lista *lista){
+    Celula *atual = lista->primeiro;
+
+    printf("Inicio -> ");
+    while(atual != NULL){
+        printf("%d ", atual->valor);
+        atual = atual->proximo;
+    }
+    printf("<- Final \n ");
 }
 
 int main(void){
-    printf("Hello World!");
+    Lista *lista = criar_lista();
+
+    for(int num = 20; num > 0; num--){
+        inserir(lista,num);
+        mostrar(lista);
+    }
+    return 0;
 }
