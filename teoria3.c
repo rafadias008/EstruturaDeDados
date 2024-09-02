@@ -76,6 +76,37 @@ void mostrar(Lista *lista){
         atual = atual->proximo;
     }
     printf("<- Final \n ");
+    
+}
+
+void remover(Lista *lista, int valor){
+    Celula *atual = lista->primeiro;
+    Celula *anterior = NULL;
+
+    while(atual != NULL && atual->valor != valor){
+
+        //remover no comeco da lista
+        if(atual->anterior == NULL){
+            atual = atual->proximo;
+            free(atual);
+        } 
+        //remover no final da lista
+        else if (atual->proximo == NULL){
+            atual = atual->anterior;
+            free(atual);
+        }
+        //remover no meio da lista
+        else if(atual->proximo != NULL && atual->anterior != NULL){
+            atual->anterior = atual->proximo;
+            atual = atual->proximo;
+            
+        }
+ 
+    }
+    free(atual); 
+    lista->qtde--;
+    
+
 }
 
 int main(void){
@@ -84,6 +115,15 @@ int main(void){
     for(int num = 20; num > 0; num--){
         inserir(lista,num);
         mostrar(lista);
+        
     }
+
+    for(int num = 20; num > 0; num--){
+        remover(lista,num);
+        mostrar(lista);
+    }
+
+    free(lista);
+
     return 0;
 }
