@@ -49,9 +49,11 @@ int main(){
 
     for(int num = 89; num > 0; num -= 7){
 
-        queue.qtde += enqueue(&queue, num);
-
+        enqueue(&queue, num);
+        mostrar(&queue);
     }
+
+    
 
     return 0;
 }
