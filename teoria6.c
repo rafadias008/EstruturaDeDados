@@ -84,7 +84,7 @@ void show(Queue *queue){
         printf("%d ", atual->valor);
         atual = atual->proximo;
     }
-    print("\n");
+    printf("\n");
 }
 
 void show_invertido(Queue *queue){
