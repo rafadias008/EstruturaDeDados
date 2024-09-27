@@ -6,28 +6,25 @@
 typedef struct{
     int dados[CAP];
     int topo;
-    int qtde;
 } Stack;
 
 bool push(Stack *pilha, int valor){
 
-    if(pilha->qtde == CAP){
+    if(pilha->topo == CAP){
         printf("Stack overflow!");
         return false;
     }
     pilha->dados[pilha->topo++] = valor;
-    pilha->qtde++;
     return true;
 
 } 
 
 int pop(Stack *pilha){
 
-    if(pilha->qtde == 0){
+    if(pilha->topo == 0){
         printf("Stack underflow\n");
         return -1;
     }
-    pilha->qtde--;
     return pilha->dados[--pilha->topo];
    
 
