@@ -1,97 +1,126 @@
 #include <stdio.h>
 #include <stdlib.h>
+#define CAP 10
 
 typedef struct Celula {
     struct Celula *proximo;
-    int valor
+    int valor;
 } Celula;
 
 typedef struct {
     Celula *topo;
-    int qtde;
+    int qtd;
 } Stack;
 
-Celula *criar_celula(int valor){
+Celula *criar_celula(int valor) {
     Celula *celula = malloc(sizeof(Celula));
     celula->proximo = NULL;
     celula->valor = valor;
     return celula;
 }
 
-Stack *criar_pilha(){
+Stack *start_stack() {
     Stack *pilha = malloc(sizeof(Stack));
     pilha->topo = NULL;
-    pilha->qtde = 0;
+    pilha->qtd = 0;
     return pilha;
 }
 
-void push(Stack *pilha, int valor){
+void push(Stack *pilha, int valor) {
     Celula *novo = criar_celula(valor);
     novo->proximo = pilha->topo;
     pilha->topo = novo;
-    pilha->qtde++;
+    pilha->qtd++;
 }
 
-int pop(Stack *pilha){
-
-    if(pilha->qtde == 0){
+int pop(Stack *pilha) {
+    if (pilha->qtd == 0) {
         return -1;
     }
     int valor = pilha->topo->valor;
     Celula *temp = pilha->topo;
     pilha->topo = pilha->topo->proximo;
-    pilha->qtde--;
+    pilha->qtd--;
     free(temp);
     return valor;
 }
 
-void show(Stack *pilha){
+void show(Stack *pilha) {
     Celula *atual = pilha->topo;
-
-    printf("Topo ->");
-    while(atual != NULL){
+    printf("TOPO -> ");
+        while (atual != NULL) {
         printf("%d ", atual->valor);
         atual = atual->proximo;
     }
-    printf("<- Base");
-    printf("\n");
+    printf("<- BASE\n");
 }
 
 int main() {
-
-    int countPe = 0, countCe = 0, countChe = 0;
-
-    Stack *pilha = criar_pilha();
+    Stack *stack = start_stack();
     char expr[100];
+    int flag = 1;
+    int colchete = 0;
+    int chave = 0;
+    int parenteses = 0;
+
+   
     fgets(expr, sizeof(expr), stdin);
 
-    for(int num = 0; expr[num] != '\0'; num++){
-
-        if(expr[num] == 123 && countCe == 0 && countPe == 0){
-            countChe++;
-            push(&pilha, expr[num]);
-        } 
-        else if(expr[num] == 125 && countChe == 0){
-            printf("Incorreto");
-            break;
+    for (int i = 0; expr[i] != '\0'; i++) {
+        if (expr[i] == '{') {
+            push(stack, expr[i]);
+            chave++;
+            if (colchete > 0) {
+                flag = 0;
+                break;
+                }
         }
-        else if(expr[num] == 91 && countChe == 0){
-            countCe++;
-            push(&pilha, expr[num]);
+        if (expr[i] == '[') {
+            push(stack, expr[i]);
+            colchete++;
+            if (parenteses > 0) {
+                flag = 0;
+                break;
+            }
         }
-        else if(expr[num] == 93 && countCe == 0){
-            printf("Incorreto");
-            break;
-        }
-        else if(expr[num] == 40){
-            countPe++;
-            push(&pilha,expr[num]);
-        }
-        else if(expr[num] == 41 && countPe == 0){
-            printf("Incorreto");
-            break;
+        if (expr[i] == '(') {
+            push(stack, expr[i]);
+            parenteses++;
         }
 
-	return 0;
+        if (expr[i] == '}' && colchete == 0) {
+            char x = pop(stack);
+            if (x != '{') {
+                flag = 0;
+                break;
+            }
+            chave--;
+        }
+
+        if (expr[i] == ']' && parenteses == 0) {
+            char x = pop(stack);
+            if (x != '[') {
+                flag = 0;
+                break;
+            }
+            colchete--;
+        }
+
+        if (expr[i] == ')') {
+            char x = pop(stack);
+            if (x != '(') {
+                flag = 0;
+                break;
+            }
+            parenteses--;
+        }
     }
+
+    if (stack->qtd == 0 && flag == 1) {
+        printf("correto");
+    } else {
+        printf("incorreto");
+    }
+
+    return 0;
 }
