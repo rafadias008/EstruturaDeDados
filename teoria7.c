@@ -26,7 +26,6 @@ int pop(Stack *pilha){
         return -1;
     }
     return pilha->dados[--pilha->topo];
-   
 
 }
 
